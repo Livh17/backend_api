@@ -1,13 +1,13 @@
 import express from 'express'
-import { listarAlunos, inserirAluno } from './Repositorios/alunoRepository.js';
-import { listarCursos, inserirCurso } from './Repositorios/cursoRepository.js';
-import { listarFilmes, inserirFilmes } from './Repositorios/filmesRepository.js';
-import { listarHotel, inserirHotel } from './Repositorios/hotelRepository.js';
-import { listarLivros, inserirLivro } from './Repositorios/livrosRepository.js';
+import { listarAlunos, inserirAluno, removerAluno, alterarAluno, consultarAluno} from './Repositorios/alunoRepository.js';
+import { listarCursos, inserirCurso, filtrarPorNome, consultarCursos, alterarCurso, removerCurso } from './Repositorios/cursoRepository.js';
+import { listarFilmes, inserirFilmes, filtrarPorFilme, consultarFilmes, alterarFilmes, removerFilmes } from './Repositorios/filmesRepository.js';
+import { listarHotel, inserirHotel, filtrarPorHospede, consultarRegistro, alterarRegistro, removerRegistro } from './Repositorios/hotelRepository.js';
+import { listarLivros, inserirLivro, removerLivro, alterarLivros, consultarLivros, filtrarLivro } from './Repositorios/livrosRepository.js';
 import { inserirSeries, listarSerie } from './Repositorios/seriesRepository.js';
 import { inserirJogos, listarJogos } from './Repositorios/jogosRepository.js';
 import { inserirTenis, listarTenis } from './Repositorios/tenisReporitory.js';
-import { inserirCarro, listarCarros } from './Repositorios/carrosRepository.js';
+import { alterarCarros, consultarCarros, filtrarPorPlaca, inserirCarro, listarCarros, removerCarros } from './Repositorios/carrosRepository.js';
 import { inserirFuncionario, listarFuncionarios } from './Repositorios/funcionariosRepository.js';
 const api = express();
 api.use(express.json());
@@ -21,12 +21,43 @@ api.get('/aluno', async (req, resp) => {
   resp.send(registros);
 })
 
+
 api.post('/aluno', async (req, resp) => {
   let novoAluno = req.body;
-
   let id = await inserirAluno(novoAluno);
   resp.send({ novoId: id });
 })
+
+
+api.get('/aluno/filtro', async (req, resp) => {
+  let nome = req.query.nome;
+  let registros = await filtrarPorNome(nome);
+  resp.send(registros);
+})
+
+
+api.get('/aluno/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  let registros = await consultarAluno(id);
+  resp.send(registros);
+})
+
+
+api.put('/aluno/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  let novosDados = req.body;
+  await alterarAluno(id, novosDados);
+  resp.send();
+})
+
+
+api.delete('/aluno/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  await removerAluno(id);
+  resp.send('Aluno removido com sucesso!');
+})
+
+
 //_________________________________________________________
 
 
@@ -39,10 +70,39 @@ api.get('/curso', async (req, resp) => {
 
 api.post('/curso', async (req, resp) => {
   let novoCurso = req.body;
-
   let id = await inserirCurso(novoCurso);
   resp.send({ novoId: id });
 })
+
+
+api.get('/curso/filtro', async (req, resp) => {
+  let nome = req.query.nome;
+  let registros = await filtrarPorNome(nome);
+  resp.send(registros);
+})
+
+
+api.get('/curso/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  let registros = await consultarCursos(id);
+  resp.send(registros);
+})
+
+
+api.put('/curso/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  let novosDados = req.body;
+  await alterarCurso(id, novosDados);
+  resp.send();
+})
+
+
+api.delete('/curso/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  await removerCurso(id);
+  resp.send('Curso removido com sucesso!');
+})
+
 //_________________________________________________________
 
 
@@ -59,6 +119,35 @@ api.post('/filmes', async (req, resp) => {
   let id = await inserirFilmes(novofilmes);
   resp.send({ novoId: id });
 })
+
+
+api.delete('/filmes/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  await removerFilmes(id);
+  resp.send('Filme removido com sucesso!');
+})
+
+
+api.get('/filmes/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  let registros = await consultarFilmes(id);
+  resp.send(registros);
+})
+
+
+api.get('/filmes/filtro', async (req, resp) => {
+  let titulo = req.query.titulo;
+  let registros = await filtrarPorFilme(titulo);
+  resp.send(registros);
+})
+
+
+api.put('/filmes/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  let novosDados = req.body;
+  await alterarFilmes(id, novosDados);
+  resp.send();
+})
 //_________________________________________________________
 
 
@@ -69,12 +158,42 @@ api.get('/livro', async (req, resp) => {
   resp.send(registros);
 })
 
+
 api.post('/livro', async (req, resp) => {
   let novoLivro = req.body;
-
   let id = await inserirLivro(novoLivro);
   resp.send({ novoId: id });
 })
+
+
+api.get('/livro/filtro', async (req, resp) => {
+  let nome = req.query.nome;
+  let registros = await filtrarLivro(nome);
+  resp.send(registros);
+})
+
+
+api.get('/livro/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  let registros = await consultarLivros(id);
+  resp.send(registros);
+})
+
+
+api.put('/livro/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  let novosDados = req.body;
+  await alterarLivros(id, novosDados);
+  resp.send();
+})
+
+
+api.delete('/livro/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  await removerLivro(id);
+  resp.send('Livro removido com sucesso!');
+})
+
 //________________________________________________________
 
 
@@ -84,12 +203,41 @@ api.get('/Hotel', async (req, resp) => {
   let registros = await listarHotel();
   resp.send(registros);
 })
+ 
 
 api.post('/Hotel', async (req, resp) => {
   let novoHotel = req.body;
-
   let id = await inserirHotel(novoHotel);
   resp.send({ novoId: id });
+})
+
+
+api.delete('/hotel/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  await removerRegistro(id);
+  resp.send('Registro removido com sucesso!');
+})
+
+
+api.get('/hotel/filtro', async (req, resp) => {
+  let nome = req.query.nome;
+  let registros = await filtrarPorHospede(nome);
+  resp.send(registros);
+})
+
+
+api.get('/hotel/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  let registros = await consultarRegistro(id);
+  resp.send(registros);
+})
+
+
+api.put('/hotel/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  let novosDados = req.body;
+  await alterarRegistro(id, novosDados);
+  resp.send();
 })
 //_________________________________________________________
 
@@ -151,12 +299,42 @@ api.get('/carro', async (req, resp) => {
   resp.send(registros);
 })
 
+
 api.post('/carro', async (req, resp) => {
   let novoCarro = req.body;
-
   let id = await inserirCarro(novoCarro);
   resp.send({ novoId: id });
 })
+
+
+api.get('/carro/filtro', async (req, resp) => {
+  let placa = req.query.placa;
+  let registros = await filtrarPorPlaca(placa);
+  resp.send(registros);
+})
+
+
+api.get('/carro/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  let registros = await consultarCarros(id);
+  resp.send(registros);
+})
+
+
+api.put('/carro/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  let novosDados = req.body;
+  await alterarCarros(id, novosDados);
+  resp.send();
+})
+
+
+api.delete('/carro/:id', async (req, resp) => {
+  let id = Number(req.params.id);
+  await removerCarros(id);
+  resp.send();
+})
+
 //_________________________________________________________
 
 

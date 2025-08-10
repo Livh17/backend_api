@@ -27,3 +27,77 @@ export async function inserirCarro(novoCarro) {
 
 
 
+
+export async function consultarCarros(id) {
+  const comando = `
+    SELECT *
+      FROM Carros
+     WHERE id = ? 
+  `
+
+  const [registros] = await conection.query(comando, [id])
+  return registros[0];
+}
+
+
+
+
+
+
+export async function filtrarPorPlaca(Placa) {
+  const comando = `
+    SELECT *
+      FROM Carros
+     WHERE Placa like ? 
+  `
+
+  const [registros] = await conection.query(comando, ['%'+Placa+'%'])
+  return registros;
+}
+
+
+
+
+
+
+export async function alterarCarros(id, novosDados) {
+  const comando = `
+    UPDATE Carros
+       SET Valor = ?,
+           Placa = ?,
+           modelo = ?,
+           cor = ?,
+           ar_condicionado = ?
+     WHERE id = ?
+
+  `
+
+  const [info] = await conection.query(comando, [
+    novosDados.Valor,
+    novosDados.Placa,
+    novosDados.modelo,
+    novosDados.cor,
+    novosDados.ar_condicionado,
+    id
+  ])
+}
+
+
+
+
+
+
+
+export async function removerCarros(id) {
+  const comando = `
+    DELETE FROM Carros
+          WHERE id = ?
+  `
+
+  const [info] = await conection.query(comando, [id]);
+}
+
+
+
+
+

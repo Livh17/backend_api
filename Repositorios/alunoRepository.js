@@ -22,3 +22,70 @@ export async function inserirAluno(novoAluno) {
   return info.insertId;
 }
 
+
+
+export async function consultarAluno(id) {
+  const comando = `
+    SELECT *
+      FROM Aluno
+     WHERE id = ? 
+  `
+
+  const [registros] = await conection.query(comando, [id])
+  return registros[0];
+}
+
+
+
+
+
+
+export async function filtrarPorNome(Nome) {
+  const comando = `
+    SELECT *
+      FROM Aluno
+     WHERE Nome like ? 
+  `
+
+  const [registros] = await conection.query(comando, ['%'+Nome+'%'])
+  return registros;
+}
+
+
+
+
+
+
+export async function alterarAluno(id, novosDados) {
+  const comando = `
+    UPDATE Aluno
+       SET Nome = ?,
+           Email = ?,
+           data_nascimento = ?
+     WHERE id = ?
+
+  `
+
+  const [info] = await conection.query(comando, [
+    novosDados.Nome,
+    novosDados.Email,
+    novosDados.data_nascimento,
+    id
+  ])
+}
+
+
+
+
+export async function removerAluno(id) {
+  const comando = `
+    DELETE FROM Aluno
+          WHERE id = ?
+  `
+  const [info] = await conection.query(comando, [id]);
+}
+
+
+
+
+
