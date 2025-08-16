@@ -24,3 +24,69 @@ export async function inserirTenis(novoTenis) {
   return info.insertId;
 }
 
+
+
+
+export async function consultarTenis(id) {
+  const comando = `
+    SELECT *
+      FROM Tenis
+     WHERE id = ? 
+  `
+  const [registros] = await conection.query(comando, [id])
+  return registros[0];
+}
+
+
+
+
+
+
+export async function filtrarPorTenis(nome) {
+  const comando = `
+    SELECT *
+      FROM Tenis
+     WHERE nome like ? 
+  `
+  const [registros] = await conection.query(comando, ['%'+ nome +'%'])
+  return registros;
+}
+
+
+
+
+
+
+export async function alterarTenis(id, novosDados) {
+  const comando = `
+    UPDATE Tenis
+       SET nome = ?, 
+       marca = ?, 
+       cor = ?,
+       tamanho = ?, 
+       preco = ?,
+       categoria = ?,
+       estoque = ?,
+     WHERE id = ?
+  ` 
+  const [info] = await conection.query(comando, [
+    novosDados.nome,
+    novosDados.marca,
+    novosDados.cor,
+    novosDados.tamanho,
+    novosDados.preco,
+    novosDados.categoria,
+    novosDados.estoque,
+    id
+  ])
+}
+
+
+export async function removerTenis(id) {
+  const comando = `
+    DELETE FROM Tenis
+          WHERE id = ?
+  `
+  const [info] = await conection.query(comando, [id]);
+}
+

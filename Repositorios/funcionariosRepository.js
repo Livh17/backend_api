@@ -40,7 +40,7 @@ export async function consultarFuncionario(id) {
 
 
 
-export async function filtrarPorNome(Nome) {
+export async function filtrarPorFuncionario(Nome) {
   const comando = `
     SELECT *
       FROM Funcionarios
