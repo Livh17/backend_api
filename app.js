@@ -1,5 +1,5 @@
 import express from 'express'
-import { listarAlunos, inserirAluno, removerAluno, alterarAluno, consultarAluno} from './Repositorios/alunoRepository.js';
+import { listarAlunos, inserirAluno, removerAluno, alterarAluno, consultarAluno, filtrarPorAluno} from './Repositorios/alunoRepository.js';
 import { listarCursos, inserirCurso, filtrarPorNome, consultarCursos, alterarCurso, removerCurso } from './Repositorios/cursoRepository.js';
 import { listarFilmes, inserirFilmes, filtrarPorFilme, consultarFilmes, alterarFilmes, removerFilmes } from './Repositorios/filmesRepository.js';
 import { listarHotel, inserirHotel, filtrarPorHospede, consultarRegistro, alterarRegistro, removerRegistro } from './Repositorios/hotelRepository.js';
@@ -31,7 +31,7 @@ api.post('/aluno', async (req, resp) => {
 
 api.get('/aluno/filtro', async (req, resp) => {
   let nome = req.query.nome;
-  let registros = await filtrarPorNome(nome);
+  let registros = await filtrarPorAluno(nome);
   resp.send(registros);
 })
 

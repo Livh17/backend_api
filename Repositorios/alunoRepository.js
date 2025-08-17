@@ -40,7 +40,7 @@ export async function consultarAluno(id) {
 
 
 
-export async function filtrarPorNome(Nome) {
+export async function filtrarPorAluno(Nome) {
   const comando = `
     SELECT *
       FROM Aluno
